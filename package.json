@@ -4,7 +4,7 @@
   "description": "Unknown API",
   "main": "webpack.config.babel.js",
   "scripts": {
-    "server": "node -r dotenv/config build/camapi.js",
+    "server": "node -r dotenv/config app/camapi.js",
     "release": "webpack --mode production",
     "build": "webpack --mode development"
   },
@@ -16,6 +16,7 @@
   "license": "ISC",
   "dependencies": {
     "dotenv": "^8.2.0",
+    "ejs": "^3.0.1",
     "express": "^4.17.1",
     "node-fetch": "^2.6.0"
   },

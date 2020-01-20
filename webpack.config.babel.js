@@ -4,7 +4,7 @@ module.exports = {
     target: 'node',
     entry: path.join(__dirname, 'src/main/js/server.js'),
     output: {
-        path: path.join(__dirname, 'build'),
+        path: path.join(__dirname, 'app'),
         filename: 'camapi.js',
     },
     module: {
