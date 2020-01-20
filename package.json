@@ -4,6 +4,7 @@
   "description": "Unknown API",
   "main": "webpack.config.babel.js",
   "scripts": {
+    "server": "node -r dotenv/config build/camapi.js",
     "release": "webpack --mode production",
     "build": "webpack --mode development"
   },
