@@ -1,0 +1,31 @@
+{
+  "name": "camapi",
+  "version": "1.0.0",
+  "description": "Unknown API",
+  "main": "webpack.config.babel.js",
+  "scripts": {
+    "release": "webpack --mode production",
+    "build": "webpack --mode development"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/e-freak/camapi.git"
+  },
+  "author": "yuki",
+  "license": "ISC",
+  "dependencies": {
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "node-fetch": "^2.6.0"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.8.3",
+    "@babel/node": "^7.8.3",
+    "@babel/preset-env": "^7.8.3",
+    "babel-loader": "^8.0.6",
+    "core-js": "^3.6.4",
+    "regenerator-runtime": "^0.13.3",
+    "webpack": "^4.41.5",
+    "webpack-cli": "^3.3.10"
+  }
+}
