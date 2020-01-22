@@ -1,55 +1,42 @@
 import express from 'express';
-import fs from 'fs';
+import multer from 'multer';
 
 export default class CamServer {
 
     constructor() {
-        this._application = express();
+        this._app = express();
+        this._uploader = this._createUploader();
         this._server = undefined;
     }
 
-    async close(onClosed = undefined) {
+    async close() {
         if (this._server) {
-            this._server.close(onClosed);
+            this._server.close();
             this._server = undefined;
         }
     }
 
     async start(host, port, onStarted = undefined) {
         this._initialize();
-        this._server = this._application.listen(port, host, onStarted);
+        this._server = this._app.listen(port, host, onStarted);
     }
 
+    _createUploader() {
+        const outputDirName = 'uploads';
+        const storage = multer.diskStorage({
+            destination: (request, file, callback) => callback(null, outputDirName),
+            filename: (request, file, callback) => callback(null, file.originalname),
+        });
+        return multer({ dest: outputDirName, storage: storage });
+    }
+    
     _initialize() {
-        this._application.get('/', (request, response) => {
-            response.send("Hello, World.");
-        });
-
-        this._application.get('/api/close', (request, response) => {
-            response.send("See you!!");
-            this.close();
-        });
-
-        this._setupGetAPI('/api/:model/v1/photos', 'photos.json');
-        this._setupGetAPI('/api/:model/v1/props', 'props.json');
-    }
-
-    _setupGetAPI(url, fileName) {
-        this._application.get(url, (request, response) => {
-            const sourceFilePath = `app/json/${request.params.model}/${fileName}`;
-            fs.readFile(sourceFilePath, 'UTF-8', (error, json) => {
-                response.json(JSON.parse(json));
-            });
-        });
-    }
-
-    _setupPutAPI(url, fileName) {
-        this._application.put(url, (request, response) => {
-            const sourceFilePath = path.join(this._rootDirPath, `app/json/${request.params.model}/${fileName}`);
-            fs.readFile(sourceFilePath, 'UTF-8', (error, json) => {
-                response.json(JSON.parse(json));
-            });
-        });
+        const sendParam = { root: '.' };
+        this._app.get('/', (request, response) => response.send("Hello, World."));
+        this._app.get('/api/close', (request, response) => { response.send("See you."), this.close() });
+        this._app.get('/api/:model/v1/photos', (request, response) => response.sendFile(`app/json/${request.params.model}/photos.json`, sendParam));
+        this._app.get('/api/:model/v1/props', (request, response) => response.sendFile(`app/json/${request.params.model}/props.json`, sendParam));
+        this._app.post('/api/upload', this._uploader.single('file'), (request, response) => response.send("Upload!!"));
     }
 
 }
