@@ -29,10 +29,11 @@ export default class CamServer {
         });
         return multer({ dest: outputDirName, storage: storage });
     }
-    
+
     _initialize() {
         const sendParam = { root: '.' };
         this._app.get('/', (request, response) => response.send("Hello, World."));
+        this._app.get('/data/:dataName', (request, response) => response.sendFile(`app/data/${request.params.dataName}`, sendParam));
         this._app.get('/api/close', (request, response) => { response.send("See you."), this.close() });
         this._app.get('/api/:model/v1/photos', (request, response) => response.sendFile(`app/json/${request.params.model}/photos.json`, sendParam));
         this._app.get('/api/:model/v1/props', (request, response) => response.sendFile(`app/json/${request.params.model}/props.json`, sendParam));
